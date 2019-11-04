@@ -1,9 +1,11 @@
 package com.hxjc.springboot.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.hxjc.springboot.model.Student;
 import com.hxjc.springboot.service.StudentService;
+import com.hxyc.common.page.Paginator;
+import com.hxyc.common.page.PageResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,7 +20,16 @@ public class StudentController {
     StudentService studentService;
 
     @RequestMapping("/boot/student")
-    public Object getStudent(@RequestParam("id") Integer id){
-        return studentService.getStudent(id);
+    public PageResult<Student> getStudent(Paginator paginator, Student student){
+
+
+        if (null == paginator){
+            paginator.setCurrentPage(1);
+            paginator.setPageSize(10);
+        }
+
+        PageResult<Student> list = studentService.listStudentByCon(student,paginator);
+
+        return list;
     }
 }
